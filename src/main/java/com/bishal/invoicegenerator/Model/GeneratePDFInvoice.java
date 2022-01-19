@@ -30,7 +30,7 @@ public class GeneratePDFInvoice
          float[] columnWidths1 = {1f};
          table1.setWidths(columnWidths1);
          table1.setHorizontalAlignment(Element.ALIGN_LEFT);
-         String S = "Pratiksha Tiwari" + "\n"+ System.lineSeparator() + "ABN:                             48213562270"
+         String S = "Pari T" + "\n"+ System.lineSeparator() + "ABN:                             48213XXXXXX"
                  + "\n" + "Period Starting:                06/11/2021"
                  + "\n" + "Period Ending:                  12/11/2021"
                  + "\n" + "Hours Completed:                          37";
@@ -46,10 +46,10 @@ public class GeneratePDFInvoice
          document.add(new LineSeparator());
 //			document.add(Chunk.NEWLINE);        //Blank line
 
-         String S2 = "Bill To: " + "Matthew Tremain                                                                       Invoice Number: 20211107"
-                 + "\n" + "             2/94 Carlton Cres, Summerhill                                          Job Title: Home Care Assistance"
-                 + "\n" + "             NSW, 2131"
-                 + "\n" + "             (Country WIde Care)";
+         String S2 = "Bill To: " + "M                                                                       Invoice Number: 20211107"
+                 + "\n" + "             */** Carlton Cres, Somehill                                          Job Title: Home Care Assistance"
+                 + "\n" + "             NSW, 2000"
+                 + "\n" + "             (C W C)";
          Paragraph p2 = new Paragraph(S2);
          document.add(p2);
          document.add(Chunk.NEWLINE);        //Blank line
@@ -119,9 +119,9 @@ public class GeneratePDFInvoice
                  + "\n"
                  + System.lineSeparator()
                  + "Bank Name: Commonwealth Bank"
-                 + "\n" + "Account Name: Pratiksha Tiwari"
-                 + "\n" + "BSB: 062692"
-                 + "\n" + "Account Number: 47022414";
+                 + "\n" + "Account Name: Pari T"
+                 + "\n" + "BSB: ******"
+                 + "\n" + "Account Number: 4702****";
 
          PdfPCell celly = new PdfPCell(new Paragraph(S1));
          celly.setBorderColor(BaseColor.BLACK);
