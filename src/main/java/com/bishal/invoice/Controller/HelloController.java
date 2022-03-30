@@ -4,6 +4,7 @@ import com.bishal.invoice.Model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
 import java.sql.Date;
@@ -50,6 +51,7 @@ public class HelloController {
     public ComboBox<String> btName;
     public void initialize () throws SQLException {
         pane_iod.toFront();
+
         //invoiceComponents.setPromptText("Please select the invoice components");
         Map<String, String> inv = invoiceDetails.invDet();
         for (Map.Entry<String, String> entry: inv.entrySet()) {
