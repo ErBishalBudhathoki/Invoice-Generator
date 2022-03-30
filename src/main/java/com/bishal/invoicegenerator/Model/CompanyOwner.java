@@ -6,9 +6,17 @@ import java.time.LocalDate;
 
 public class CompanyOwner extends Label {
     public String companyName;
-    public String abn;
+    public Long abn;
     public LocalDate periodStartingDate;
     public LocalDate periodEndingDate;
+    public int id;
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    public int getID() {
+        return  id;
+    }
 
     public String getJobTitle() {
         return jobTitle;
@@ -28,11 +36,11 @@ public class CompanyOwner extends Label {
         this.companyName = companyName;
     }
 
-    public String getAbn() {
+    public Long getAbn() {
         return abn;
     }
 
-    public void setAbn(String abn) {
+    public void setAbn(Long abn) {
         this.abn = abn;
     }
 
