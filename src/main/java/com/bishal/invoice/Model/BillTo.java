@@ -1,4 +1,4 @@
-package com.bishal.invoicegenerator.Model;
+package com.bishal.invoice.Model;
 
 public class BillTo {
     public String clientName;

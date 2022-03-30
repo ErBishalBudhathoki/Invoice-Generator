@@ -1,4 +1,4 @@
-package com.bishal.invoicegenerator.Model;
+package com.bishal.invoice.Model;
 
 import javafx.scene.control.Label;
 

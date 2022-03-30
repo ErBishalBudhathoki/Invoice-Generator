@@ -1,6 +1,6 @@
-package com.bishal.invoicegenerator.Controller;
+package com.bishal.invoice.Controller;
 
-import com.bishal.invoicegenerator.Model.*;
+import com.bishal.invoice.Model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -41,15 +42,13 @@ public class HelloController {
     public TextField endTime;
     public TextField rate;
     public ComboBox<String> invoiceComponents;
-    public ComboBox<Long> abnComboBox;
     long days;
     LocalDate startDate;
     LocalDate endingDate;
     Database db = new Database();
     InvoiceDetails invoiceDetails = new InvoiceDetails();
     public ComboBox<String> btName;
-
-    public void initialize () throws NullPointerException {
+    public void initialize () throws SQLException {
         pane_iod.toFront();
         //invoiceComponents.setPromptText("Please select the invoice components");
         Map<String, String> inv = invoiceDetails.invDet();
@@ -58,21 +57,17 @@ public class HelloController {
         }
         try {
             ArrayList<String> btName = db.loadbtName();
-            ArrayList<Long> loadAbn = db.loadABN();
             for (String s : btName) {
                 this.btName.getItems().add(String.valueOf(s));
             }
-            for (Long s : loadAbn) {
-                this.abnComboBox.getItems().add(s);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (NullPointerException n) {
+            System.out.println(n);
         }
 
 //        icOptions.setValue("A");
 //        System.out.println(icOptions.getValue());
     }
-    public HelloController() throws SQLException {
+    public HelloController() throws SQLException, ClassNotFoundException {
 //        icOptions.getItems().addAll("abc");
 //        ComboBox emailComboBox = new ComboBox();
 
@@ -115,7 +110,8 @@ public class HelloController {
     }
 
     public boolean checkABNLength(long abn){
-        return Long.toString(abn).matches("^[0-9]{11}$");
+        boolean value = Long.toString(abn).matches("^[0-9]{11}$");
+        return value;
     }
     ArrayList result;
     CompanyOwner ownerName = new CompanyOwner();
@@ -125,7 +121,7 @@ public class HelloController {
         ownerName.setCompanyName(companyName_Owner.getText());
         String companyName = ownerName.getCompanyName();
 //        BigInteger bigIntFromString = new BigInteger(ABN.getText());
-        long abn = Long.parseLong(ABN.getText());
+        Long abn = Long.valueOf(ABN.getText());
         //int a = Integer.parseInt(ABN.getText());
         if (checkABNLength(abn)) {
             System.out.println("Inside if loop");
@@ -193,13 +189,12 @@ public class HelloController {
         try {
 
 
-            if (checkABNLength(Long.parseLong(String.valueOf(abnComboBox.getValue())))) {
-                result = db.checkABN(Long.valueOf(String.valueOf(abnComboBox.getValue())));
+            if (checkABNLength(Long.parseLong(ABN.getText()))) {
+                result = db.checkABN(Long.valueOf(ABN.getText()));
                 if (result != null) {
-                    String ABNs = (String) result.get(3);
                     String compName = (String) result.get(2);
                     String jobTtle = (String) result.get(1);
-                    ABN.setText((String.valueOf(abnComboBox.getValue())));
+
 //        companyName_Owner.setText(result.getString("companyName"));
                     jobTitle.setText(jobTtle);
                     companyName_Owner.setText(compName);
@@ -291,7 +286,7 @@ public class HelloController {
     int counter = 0;
     long totalMinutes = 0;
     @FXML
-    public void addComponents() {
+    public void addComponents() throws ParseException {
 
         counter++;
 //        if (counter <= days) { //this checks if the number of days between period starting and ending is
@@ -408,7 +403,7 @@ public class HelloController {
 //    }
 
     @FXML
-    public void sendEmail(ActionEvent actionEvent) {
+    public void sendEmail(ActionEvent actionEvent) throws SQLException {
         //GeneratePDFInvoice generatePDFInvoice = new GeneratePDFInvoice();
         String id = GeneratePDFInvoice.updatedInvID;
         System.out.println("ID here: "+id);
