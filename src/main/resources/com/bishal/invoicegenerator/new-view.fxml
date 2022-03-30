@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="747.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bishal.invoicegenerator.Controller.HelloController">
+   <children>
+      <AnchorPane layoutX="240.0" prefHeight="450.0" prefWidth="507.0">
+         <effect>
+            <DropShadow />
+         </effect>
+         <children>
+            <Pane fx:id="pane_invDet" prefHeight="450.0" prefWidth="507.0" style="-fx-background-color: #483285;">
+            <children>
+                <TextField fx:id="startTime" layoutX="233.0" layoutY="204.0" />
+                <TextField fx:id="endTime" layoutX="233.0" layoutY="246.0" />
+                <TextField fx:id="rate" layoutX="233.0" layoutY="291.0" />
+                <Label layoutX="83.0" layoutY="118.0" text="Invoice Components" textFill="YELLOW" />
+                <Label layoutX="122.0" layoutY="163.0" text="Worked Date" textFill="YELLOW" />
+                <Label layoutX="137.0" layoutY="208.0" text="Start Time" textFill="YELLOW" />
+                <Label layoutX="139.0" layoutY="250.0" text="End Time" textFill="YELLOW" />
+                <Label layoutX="164.0" layoutY="295.0" text="Rate" textFill="YELLOW" />
+                <Button layoutX="337.0" layoutY="383.0" mnemonicParsing="false" onAction="#generateButtonClick" style="-fx-background-color: black;" text="Generate Invoice" textFill="YELLOW" />
+                <DatePicker fx:id="workedDate" layoutX="233.0" layoutY="159.0" />
+                <Button fx:id="add" layoutX="120.0" layoutY="383.0" mnemonicParsing="false" onAction="#addComponents" style="-fx-background-color: black;" text="Add" textFill="YELLOW" />
+                <ComboBox fx:id="invoiceComponents" layoutX="234.0" layoutY="114.0" prefHeight="26.0" prefWidth="177.0" promptText="Please select the invoice components" style="-fx-background-color: black;" stylesheets="@style.css" />
+            </children> </Pane>
+            <Pane fx:id="pane_billTo" prefHeight="450.0" prefWidth="507.0" style="-fx-background-color: #483285;">
+               <children>
+                  <ComboBox fx:id="btName" layoutX="46.0" layoutY="75.0" prefHeight="26.0" prefWidth="177.0" promptText="Select Client's Name" style="-fx-background-color: black;" stylesheets="@style.css" />
+                  <Button layoutX="267.0" layoutY="76.0" mnemonicParsing="false" onAction="#loadNameButton" style="-fx-background-color: black;" text="Load details" textFill="YELLOW" />
+                  <Label layoutX="155.0" layoutY="127.0" text="Client Name" textFill="YELLOW" />
+                  <Label layoutX="188.0" layoutY="172.0" text="Street" textFill="YELLOW" />
+                  <Label layoutX="184.0" layoutY="214.0" text="Suburb" textFill="YELLOW" />
+                  <Label layoutX="190.0" layoutY="253.0" text="State" textFill="YELLOW" />
+                  <Label layoutX="158.0" layoutY="291.0" text="Postal Code" textFill="YELLOW" />
+                  <Label layoutX="141.0" layoutY="329.0" text="Company Name" textFill="YELLOW" />
+                  <TextField fx:id="billToName" layoutX="267.0" layoutY="123.0" />
+                  <TextField fx:id="street" layoutX="267.0" layoutY="168.0" />
+                  <TextField fx:id="suburb" layoutX="267.0" layoutY="210.0" />
+                  <TextField fx:id="state" layoutX="267.0" layoutY="249.0" />
+                  <TextField fx:id="postalCode" layoutX="267.0" layoutY="287.0" />
+                  <TextField fx:id="companyName_billTo" layoutX="267.0" layoutY="325.0" />
+                  <Button layoutX="267.0" layoutY="361.0" mnemonicParsing="false" onAction="#billToNextButtonClick" style="-fx-background-color: black;" text="Next" textFill="YELLOW" />
+               </children></Pane>
+            <Pane fx:id="pane_sendEmail" prefHeight="450.0" prefWidth="507.0" style="-fx-background-color: #483285;">
+               <children>
+                  <Label layoutX="167.0" layoutY="163.0" text="Please enter the password !!" textFill="#e0e808">
+                     <font>
+                        <Font name="Berlin Sans FB" size="18.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="sendEmail" layoutX="244.0" layoutY="304.0" mnemonicParsing="false" onAction="#sendEmail" style="-fx-background-color: black;" text="Send" textFill="#e0e808" />
+                  <PasswordField fx:id="passwordBox" alignment="CENTER" layoutX="196.0" layoutY="225.0" promptText="Password" style="-fx-background-color: gray;" />
+               </children></Pane>
+            <Pane fx:id="pane_iod" prefHeight="450.0" prefWidth="507.0" style="-fx-background-color: #483285;">
+                <children>
+                <Label layoutX="87.0" layoutY="153.0" text="Company Name" textFill="YELLOW" />
+                <Label layoutX="150.0" layoutY="98.0" text="ABN" textFill="YELLOW" />
+                <Label layoutX="100.0" layoutY="206.0" text="Period Starting" textFill="YELLOW" />
+                <Label layoutX="103.0" layoutY="262.0" text="Period Ending" textFill="YELLOW" />
+                <TextField fx:id="companyName_Owner" layoutX="220.0" layoutY="149.0" />
+                <TextField fx:id="ABN" layoutX="220.0" layoutY="94.0" />
+                <Button layoutX="394.0" layoutY="55.0" mnemonicParsing="false" onAction="#check" style="-fx-background-color: black;" text="Check" textFill="YELLOW" />
+                <Button layoutX="280.0" layoutY="371.0" mnemonicParsing="false" onAction="#companyOwnerNextButtonClick" style="-fx-background-color: black;" text="Next" textFill="YELLOW" />
+                <Label layoutX="128.0" layoutY="316.0" text="Job Title" textFill="YELLOW" />
+                <TextField fx:id="jobTitle" layoutX="220.0" layoutY="312.0" />
+                <DatePicker fx:id="periodStarting" layoutX="220.0" layoutY="202.0" style="-fx-background-color: gray;" />
+                <DatePicker fx:id="periodEnding" layoutX="220.0" layoutY="258.0" style="-fx-background-color: gray;" />
+                  <ComboBox fx:id="abnComboBox" layoutX="219.0" layoutY="55.0" prefWidth="150.0" promptText="Select ABN" style="-fx-background-color: black;" stylesheets="@style.css" />
+
+                </children> </Pane>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="450.0" prefWidth="240.0" style="-fx-background-color: #483285;">
+         <children>
+            <Button fx:id="invoiceOwner" layoutY="91.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="67.0" prefWidth="240.0" style="-fx-background-color: transparent;" text="Invoice Owner Details" textFill="#e0e808">
+               <font>
+                  <Font name="Berlin Sans FB" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="billTo" layoutY="158.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="67.0" prefWidth="240.0" style="-fx-background-color: transparent;" text="Bill To" textFill="#e0e808">
+               <font>
+                  <Font name="Berlin Sans FB" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="invoiceDetail" layoutY="225.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="67.0" prefWidth="240.0" style="-fx-background-color: transparent;" text="Invoice Details" textFill="#e0e808">
+               <font>
+                  <Font name="Berlin Sans FB" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="sendEmail" layoutY="300.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="67.0" prefWidth="240.0" style="-fx-background-color: transparent;" text="Send Email" textFill="#e0e808">
+               <font>
+                  <Font name="Berlin Sans FB" size="18.0" />
+               </font>
+            </Button>
+            <Text fill="YELLOW" fontSmoothingType="LCD" layoutX="67.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="INVOICE">
+               <font>
+                  <Font name="Baskerville Old Face" size="29.0" />
+               </font>
+            </Text>
+         </children>
+         <effect>
+            <DropShadow />
+         </effect>
+      </AnchorPane>
+   </children>
+</AnchorPane>
