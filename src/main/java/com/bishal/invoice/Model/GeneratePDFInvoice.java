@@ -481,9 +481,9 @@ public class GeneratePDFInvoice
                  + "\n"
                  + System.lineSeparator()
                  + "Bank Name: Commonwealth Bank"
-                 + "\n" + "Account Name: Pratiksha Tiwari"
-                 + "\n" + "BSB: 062692"
-                 + "\n" + "Account Number: 47022414";
+                 + "\n" + "Account Name: Your Name"
+                 + "\n" + "BSB: 000000"
+                 + "\n" + "Account Number: 00000001";
 
          PdfPCell celly = new PdfPCell(new Paragraph(S1));
          celly.setBorderColor(BaseColor.BLACK);
