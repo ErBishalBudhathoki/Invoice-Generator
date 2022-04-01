@@ -5,11 +5,32 @@ import javafx.scene.control.Label;
 import java.time.LocalDate;
 
 public class CompanyOwner extends Label {
-    public String companyName;
+    public String companyName, jobTitle;
     public Long abn;
     public LocalDate periodStartingDate;
     public LocalDate periodEndingDate;
     public int id;
+
+    public CompanyOwner() {
+//        try {
+//            this.abn = Long.parseLong("");
+//            this.companyName = "";
+//            this.periodStartingDate = LocalDate.parse("");
+//            this.periodEndingDate = LocalDate.parse("");
+//        } catch(Exception ne){
+//            System.out.println(ne);
+//        }
+
+
+    }
+
+    public CompanyOwner(long abn, String companyName, LocalDate periodStartingDate, LocalDate periodEndingDate, String jobTitle) {
+        this.abn = abn;
+        this.companyName = companyName;
+        this.periodStartingDate = periodStartingDate;
+        this.periodEndingDate = periodEndingDate;
+        this.jobTitle = jobTitle;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -26,7 +47,6 @@ public class CompanyOwner extends Label {
         this.jobTitle = jobTitle;
     }
 
-    public String jobTitle;
 
     public String getCompanyName() {
         return companyName;

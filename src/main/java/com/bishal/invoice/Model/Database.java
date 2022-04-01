@@ -1,5 +1,7 @@
 package com.bishal.invoice.Model;
 
+import com.mysql.cj.exceptions.UnableToConnectException;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -100,24 +102,48 @@ public class Database {
                     " CONSTRAINT FK_ids FOREIGN KEY  (invdet_ID)   REFERENCES invoiceownerdetail(id) )";
             stmt.executeUpdate(createTableID);
             System.out.println(" Invoice Detail Table created successfully...");
+        } catch (UnableToConnectException e) {
+            System.out.println("Connection Fail" +e);
         }
 
 
     }
 
-    public ArrayList checkABN(Long abn) throws SQLException {
+    public ArrayList<Long> loadABN() throws SQLException {
         try (Connection conn = getConnection(MySQLURL, databaseUserName, databasePassword);
 
-             PreparedStatement chkABN = conn.prepareStatement("SELECT id, companyName, JobTitle FROM INVOICE.invoiceownerdetail " +
+             PreparedStatement loadABNs = conn.prepareStatement("SELECT ABN FROM INVOICE.invoiceownerdetail " +
+                     "ORDER BY id ")){
+
+            ResultSet loadABN = loadABNs.executeQuery();
+            System.out.println("ResultSet: "+loadABN);
+            if (loadABN.next()) { //getInt("id") > 0
+                ArrayList<Long> a = new ArrayList();
+                a.add(loadABN.getLong("ABN"));
+
+                System.out.println("Array List:" +a +" " +a.get(0));
+                return a;
+            } else {
+                System.out.println("Record does not exist");
+                return null;
+            }
+        }
+    }
+
+    public ArrayList<Object> checkABN(Long abn) throws SQLException {
+        try (Connection conn = getConnection(MySQLURL, databaseUserName, databasePassword);
+
+             PreparedStatement chkABN = conn.prepareStatement("SELECT id, companyName, JobTitle, ABN FROM INVOICE.invoiceownerdetail " +
                      "WHERE ABN = ? ")){
             chkABN.setLong(1, (abn));
             ResultSet chkABNRs = chkABN.executeQuery();
             System.out.println("ResultSet: "+chkABNRs);
             if (chkABNRs.next()) { //getInt("id") > 0
-                ArrayList a = new ArrayList();
+                ArrayList<Object> a = new ArrayList<>();
                 a.add(chkABNRs.getInt("id"));
                 a.add(chkABNRs.getString("JobTitle"));
                 a.add(chkABNRs.getString("companyName"));
+                a.add(chkABNRs.getString("ABN"));
                 System.out.println("Array List:" +a +" " +a.get(0));
                 return a;
             } else {
@@ -129,7 +155,7 @@ public class Database {
 
 
 
-public boolean iod = false;
+    public boolean iod = false;
     public void insertIOD(String companyNames, Long abn, LocalDate periodStartingDate, LocalDate periodEndingDate, String jobTitle) throws SQLException, ClassNotFoundException {
         try (Connection conn = getConnection(MySQLURL, databaseUserName, databasePassword);
 
@@ -157,7 +183,7 @@ public boolean iod = false;
         }
     }
 
-    public ArrayList checkBillTo(String nameClient, int currentUID) throws SQLException {
+    public ArrayList<Object> checkBillTo(String nameClient, int currentUID) throws SQLException {
         try (Connection conn = getConnection(MySQLURL, databaseUserName, databasePassword);
 
              PreparedStatement chkName = conn.prepareStatement("SELECT * FROM INVOICE.billto " +
@@ -165,7 +191,7 @@ public boolean iod = false;
             chkName.setString(1, (nameClient));
             chkName.setInt(2, currentUID);
             //chkName.executeUpdate();
-            ArrayList billToList = new ArrayList<>();
+            ArrayList<Object> billToList = new ArrayList<>();
             ResultSet chkNameID = chkName.executeQuery();
             if (chkNameID.next()) {
                 billToList.add(chkNameID.getString("btID"));
@@ -370,7 +396,7 @@ public boolean iod = false;
         String rate = null;
         String hours = null;
         String units = null;
-        System.out.println(String.valueOf(last_inserted_id));
+        System.out.println((last_inserted_id));
         ResultSet rs2;
         System.out.println("AA: " +a);
         ArrayList<String> invoiceResultList = null;
@@ -430,7 +456,7 @@ public boolean iod = false;
         Connection conn = getConnection(MySQLURL, databaseUserName, databasePassword);
         PreparedStatement myRs = conn.prepareStatement("select ClientName from invoice.billto ORDER BY btID");
         ResultSet loadName = myRs.executeQuery();
-        ArrayList<String> extractedName = new ArrayList<String>();
+        ArrayList<String> extractedName = new ArrayList<>();
         while (loadName.next()) {
             extractedName.add(loadName.getString("ClientName"));
 
@@ -448,7 +474,7 @@ public boolean iod = false;
         PreparedStatement myRs = conn.prepareStatement("select * from invoice.billto WHERE ClientName = ?" );
         myRs.setString(1, value);
         ResultSet detail = myRs.executeQuery();
-        ArrayList<String> details = new ArrayList<String>();
+        ArrayList<String> details = new ArrayList<>();
         while (detail.next()) {
             details.add(detail.getString(2));
             details.add(detail.getString(3));

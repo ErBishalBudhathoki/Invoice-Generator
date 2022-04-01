@@ -1,10 +1,11 @@
 package com.bishal.invoice.Controller;
 
 import com.bishal.invoice.Model.*;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 
 import java.sql.Date;
@@ -37,7 +38,7 @@ public class HelloController {
     public TextField state;
     public TextField postalCode;
     public TextField companyName_billTo;
-
+    public ComboBox<Long> abnComboBox;
     public DatePicker workedDate;
     public TextField startTime;
     public TextField endTime;
@@ -49,29 +50,52 @@ public class HelloController {
     Database db = new Database();
     InvoiceDetails invoiceDetails = new InvoiceDetails();
     public ComboBox<String> btName;
+    private ObservableList data;
+    @FXML
+    private TableView<CompanyOwner> iodTable;
+    @FXML
+    private TableColumn<CompanyOwner, Long> abnColumn;
+    @FXML
+    private TableColumn<CompanyOwner, String> CompanyNameColumn;
+    @FXML
+    private TableColumn<CompanyOwner, LocalDate> periodStartingColumn;
+    @FXML
+    private TableColumn<CompanyOwner, LocalDate> periodEndingColumn;
+    @FXML
+    private TableColumn<CompanyOwner, String> jobTitleColumn;
     public void initialize () throws SQLException {
         pane_iod.toFront();
-
         //invoiceComponents.setPromptText("Please select the invoice components");
         Map<String, String> inv = invoiceDetails.invDet();
         for (Map.Entry<String, String> entry: inv.entrySet()) {
             invoiceComponents.getItems().add(String.valueOf(entry));
         }
         try {
+            abnColumn.setCellValueFactory(new PropertyValueFactory<CompanyOwner, Long>("abn"));
+            CompanyNameColumn.setCellValueFactory(new PropertyValueFactory<CompanyOwner, String>("companyName"));
+            periodStartingColumn.setCellValueFactory(new PropertyValueFactory<CompanyOwner, LocalDate>("periodStartingDate"));
+            periodEndingColumn.setCellValueFactory(new PropertyValueFactory<CompanyOwner, LocalDate>("periodEndingDate"));
+            jobTitleColumn.setCellValueFactory(new PropertyValueFactory<CompanyOwner, String>("jobTitle"));
             ArrayList<String> btName = db.loadbtName();
+            ArrayList<Long> loadAbn = db.loadABN();
             for (String s : btName) {
                 this.btName.getItems().add(String.valueOf(s));
             }
-        } catch (NullPointerException n) {
-            System.out.println(n);
+            for (Long s : loadAbn) {
+                this.abnComboBox.getItems().add(s);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
 //        icOptions.setValue("A");
 //        System.out.println(icOptions.getValue());
     }
     public HelloController() throws SQLException, ClassNotFoundException {
+
 //        icOptions.getItems().addAll("abc");
 //        ComboBox emailComboBox = new ComboBox();
+
 
     }
     @FXML
@@ -86,6 +110,7 @@ public class HelloController {
             pane_sendEmail.toFront();
         }
     }
+
     @FXML
     protected void loadNameButton() throws SQLException {
         ArrayList<String> loadName = db.loadNameDetals(btName.getValue());
@@ -115,6 +140,7 @@ public class HelloController {
         boolean value = Long.toString(abn).matches("^[0-9]{11}$");
         return value;
     }
+
     ArrayList result;
     CompanyOwner ownerName = new CompanyOwner();
     @FXML
@@ -157,20 +183,39 @@ public class HelloController {
                     + ownerName.getPeriodEndingDate() + " " + ownerName.getJobTitle());
             result = null;
             result = db.checkABN(abn1);
+            CompanyOwner co = new CompanyOwner(Long.parseLong(ABN.getText()), companyName_Owner.getText(),
+                    ownerName.getPeriodStartingDate(), ownerName.getPeriodEndingDate(), jobTitle.getText());
 //            String s =  result.get(0);
 
             //System.out.println("Result: " +result);
             if (result == null) { //if record does not exist
                 db.insertIOD(companyName, abn1, ownerName.getPeriodStartingDate(), ownerName.getPeriodEndingDate(),
                         ownerName.getJobTitle());
+
+                ObservableList<CompanyOwner> owners = iodTable.getItems();
+                owners.add(co);
+                System.out.println(owners);
+                iodTable.setItems(owners);
+
             } else {
                 if (db.containsPeriod((Integer) result.get(0), startDate, endingDate)) {
                     System.out.println("Details Exist" + result.get(0));
                     db.setLast_inserted_id((Integer) result.get(0));
+//                    CompanyOwner co = new CompanyOwner(Long.parseLong(ABN.getText()), companyName_Owner.getText(),
+//                            ownerName.getPeriodStartingDate(), ownerName.getPeriodEndingDate(), jobTitle.getText());
+                    ObservableList<CompanyOwner> owners = iodTable.getItems();
+                    owners.add(co);
+                    System.out.println(owners);
+                    iodTable.setItems(owners);
+
                 } else {
                     //db.setLast_inserted_id( (int)result.get(0)); //check here ???
                     db.insertIOD(companyName, abn1, ownerName.getPeriodStartingDate(), ownerName.getPeriodEndingDate(),
                             ownerName.getJobTitle());
+                    ObservableList<CompanyOwner> owners = iodTable.getItems();
+                    owners.add(co);
+                    System.out.println(owners);
+                    iodTable.setItems(owners);
                 }
 
             }
@@ -191,12 +236,13 @@ public class HelloController {
         try {
 
 
-            if (checkABNLength(Long.parseLong(ABN.getText()))) {
-                result = db.checkABN(Long.valueOf(ABN.getText()));
+            if (checkABNLength(Long.parseLong(String.valueOf(abnComboBox.getValue())))) {
+                result = db.checkABN(Long.valueOf(String.valueOf(abnComboBox.getValue())));
                 if (result != null) {
+                    String ABNs = (String) result.get(3);
                     String compName = (String) result.get(2);
                     String jobTtle = (String) result.get(1);
-
+                    ABN.setText((String.valueOf(abnComboBox.getValue())));
 //        companyName_Owner.setText(result.getString("companyName"));
                     jobTitle.setText(jobTtle);
                     companyName_Owner.setText(compName);
